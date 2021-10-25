@@ -31,4 +31,5 @@ Route::middleware('auth:sanctum')->group(function(){
 
 Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
-Route::get('foos', [FoodController::class, 'all']);
+Route::get('food', [FoodController::class, 'all']);
+Route::post('midtrans/callback', [MidtransController::class, 'callback']);
