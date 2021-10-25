@@ -18,29 +18,40 @@ class UserController extends Controller
 
     public function login(Request $request){
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'email' => 'email|required',
                 'password' => 'required'
             ]);
 
-            $credentials = $request(['email','password']);
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+
+            $credentials = request(['email','password']);
+            // var_dump($credentials);
+            // die;
             if(!Auth::attempt($credentials)){
                 return ResponseFormatter::error([
                     'message' => 'Unauthorized'
                 ], 'Authentication Failed','500');
             }
+            
 
             $user = User::where('email' , $request->email)->first();
-            if(!Hash::check($request->password, $user->password, [])){
+            if(!Hash::check($request->password, $user->password, [])) {
                 throw new \Exception('Invalid Credentials');
             }
+      
 
-            $tokenResult = $user->createToken('authToken')->plaintTextToken;
+            $tokenResult = $user->createToken('authToken')->plainTextToken;
+            
             return ResponseFormatter::success([
                 'access_token' => $tokenResult,
                 'token_type' => 'Bearer',
                 'user' => $user
-            ], 'Aunthenticated');
+            ], 'Authenticated');
+
+            
 
         }catch(Exception $error){
             return ResponseFormatter::error([

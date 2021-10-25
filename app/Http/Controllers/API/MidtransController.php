@@ -8,7 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class MidtransContoller extends Controller
+class MidtransController extends Controller
 {
     public function callback(Request $request){
         //set konfigurasi midtrans
@@ -61,5 +61,17 @@ class MidtransContoller extends Controller
 
         //simpan transaksi
         $transaction->save();
+    }
+
+    public function success(){
+        return view('midtrans.success');
+    }
+
+    public function unfinish(){
+        return view('midtrans.unfinish');
+    }
+
+    public function error(){
+        return view('midtrans.error');
     }
 }
